@@ -1,5 +1,9 @@
 package com.escrowlite.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.escrowlite.entity.Milestone;
 import com.escrowlite.entity.MilestoneStatus;
 import com.escrowlite.entity.Project;
@@ -7,9 +11,6 @@ import com.escrowlite.exception.BadRequestException;
 import com.escrowlite.exception.ResourceNotFoundException;
 import com.escrowlite.repository.MilestoneRepository;
 import com.escrowlite.repository.ProjectRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MilestoneService {

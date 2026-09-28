@@ -26,7 +26,9 @@ public class MilestoneController {
 
     private final MilestoneService milestoneService;
 
-    public MilestoneController(MilestoneService milestoneService) {
+    public MilestoneController(
+            MilestoneService milestoneService) {
+
         this.milestoneService = milestoneService;
     }
 
@@ -64,7 +66,9 @@ public class MilestoneController {
             @PathVariable Long projectId) {
 
         return ResponseEntity.ok(
-                milestoneService.getMilestonesByProject(projectId)
+                milestoneService.getMilestonesByProject(
+                        projectId
+                )
         );
     }
 
