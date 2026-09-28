@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Client Dashboard | EscrowLite</title>
+
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">E</div>
+            <div>
+                <h2>EscrowLite</h2>
+                <span>Freelance Platform</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a class="nav active" href="/client-dashboard">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a class="nav" href="#">
+                <span>▣</span>
+                Projects
+            </a>
+
+            <a class="nav" href="#">
+                <span>◆</span>
+                Milestones
+            </a>
+
+            <a class="nav" href="#">
+                <span>✓</span>
+                Submissions
+            </a>
+
+            <a class="nav" href="#">
+                <span>◇</span>
+                Escrow
+            </a>
+
+            <a class="nav" href="#">
+                <span>₹</span>
+                Transactions
+            </a>
+
+        </nav>
+
+        <button class="logout" id="logoutButton">
+            ↪ &nbsp; Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div>
+                <div class="eyebrow">CLIENT PORTAL</div>
+
+                <h1>Dashboard</h1>
+
+                <p>
+                    Manage your projects, milestones and payments.
+                </p>
+            </div>
+
+            <div class="profile">
+
+                <div class="avatar" id="avatar">
+                    S
+                </div>
+
+                <div>
+                    <strong id="profileName">
+                        Client
+                    </strong>
+
+                    <small>
+                        Client Account
+                    </small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME -->
+        <section class="welcome">
+
+            <div>
+
+                <span class="welcome-tag">
+                    CLIENT WORKSPACE
+                </span>
+
+                <h2 id="welcomeName">
+                    Welcome back!
+                </h2>
+
+                <p>
+                    Track your freelance projects and review
+                    completed work from one place.
+                </p>
+
+            </div>
+
+            <div class="welcome-symbol">
+                E
+            </div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat">
+
+                <div class="stat-icon purple">
+                    ▣
+                </div>
+
+                <div>
+                    <span>Active Projects</span>
+                    <strong id="projectCount">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon orange">
+                    ✓
+                </div>
+
+                <div>
+                    <span>Pending Reviews</span>
+                    <strong id="reviewCount">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon green">
+                    ₹
+                </div>
+
+                <div>
+                    <span>Escrow Released</span>
+                    <strong id="escrowAmount">₹0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon blue">
+                    ✓
+                </div>
+
+                <div>
+                    <span>Transactions</span>
+                    <strong id="transactionCount">0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GRID -->
+        <section class="dashboard-grid">
+
+
+            <!-- PROJECTS -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="section-label">
+                            PROJECTS
+                        </span>
+
+                        <h3>Active Projects</h3>
+                    </div>
+
+                    <button>
+                        + New Project
+                    </button>
+
+                </div>
+
+                <div id="projectList">
+
+                    <div class="loading">
+                        Loading projects...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REVIEW -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="section-label">
+                            ACTION REQUIRED
+                        </span>
+
+                        <h3>Pending Reviews</h3>
+                    </div>
+
+                </div>
+
+                <div id="reviewList">
+
+                    <div class="empty">
+                        No pending reviews
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACTIVITY -->
+        <section class="panel activity-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="section-label">
+                        RECENT ACTIVITY
+                    </span>
+
+                    <h3>Project Activity</h3>
+                </div>
+
+            </div>
+
+            <div class="activity">
+
+                <div class="activity-item">
+                    <div class="activity-dot green"></div>
+
+                    <div>
+                        <strong>Escrow release completed</strong>
+                        <span>Milestone payment processed</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-dot purple"></div>
+
+                    <div>
+                        <strong>Project milestone updated</strong>
+                        <span>Check your project progress</span>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-dot orange"></div>
+
+                    <div>
+                        <strong>Submission waiting for review</strong>
+                        <span>Review freelancer work</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            EscrowLite © 2026
+            <span>•</span>
+            Milestone-Based Freelance Release Tracker
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="/js/client-dashboard.js"></script>
+
+</body>
+</html>

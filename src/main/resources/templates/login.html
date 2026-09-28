@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EscrowLite | Login</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css">
+
+    <style>
+
+        .login-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 950px;
+            min-height: 560px;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+        }
+
+        .login-brand {
+            background: linear-gradient(
+                145deg,
+                #3730a3,
+                #4f46e5
+            );
+            color: white;
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-brand::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            right: -100px;
+            bottom: -100px;
+        }
+
+        .login-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 45px;
+        }
+
+        .login-brand-logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .login-brand-logo h1 {
+            font-size: 21px;
+        }
+
+        .login-brand-logo span {
+            display: block;
+            font-size: 11px;
+            color: #dbeafe;
+            margin-top: 3px;
+        }
+
+        .login-brand h2 {
+            font-size: 32px;
+            line-height: 1.25;
+            max-width: 380px;
+            margin-bottom: 18px;
+        }
+
+        .login-brand-description {
+            color: #dbeafe;
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 390px;
+        }
+
+        .login-features {
+            margin-top: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .login-feature {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 12px;
+            color: #eef2ff;
+        }
+
+        .login-feature-icon {
+            width: 27px;
+            height: 27px;
+            border-radius: 7px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .login-form-section {
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form-section h2 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .login-subtitle {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 14px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0 13px 0 40px;
+            outline: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .password-input {
+            padding-right: 65px;
+        }
+
+        .login-input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 13px;
+            left: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4f46e5;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            z-index: 5;
+            background: white;
+            padding: 3px 2px;
+        }
+
+        .password-toggle:hover {
+            color: #3730a3;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 46px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+            background: #3730a3;
+        }
+
+        .login-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .login-message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 11px 13px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .login-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .login-message.success {
+            display: block;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .register-link {
+            margin-top: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 11px;
+        }
+
+        .register-link a {
+            color: #4f46e5;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            color: #3730a3;
+        }
+
+        .login-footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+        @media (max-width: 750px) {
+
+            .login-page {
+                padding: 15px;
+            }
+
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-brand {
+                padding: 35px;
+            }
+
+            .login-brand h2 {
+                font-size: 25px;
+            }
+
+            .login-features {
+                display: none;
+            }
+
+            .login-brand-logo {
+                margin-bottom: 25px;
+            }
+
+            .login-form-section {
+                padding: 35px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="login-page">
+
+    <div class="login-container">
+
+
+        <!-- LEFT SIDE -->
+
+        <section class="login-brand">
+
+            <div class="login-brand-logo">
+
+                <div class="login-brand-logo-icon">
+                    E
+                </div>
+
+                <div>
+
+                    <h1>EscrowLite</h1>
+
+                    <span>
+                        Milestone-Based Freelance Tracker
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <h2>
+                Secure freelance
+                payments, one milestone
+                at a time.
+            </h2>
+
+
+            <p class="login-brand-description">
+
+                Manage projects, track milestones,
+                review submissions and record
+                escrow releases through one
+                centralized platform.
+
+            </p>
+
+
+            <div class="login-features">
+
+                <div class="login-feature">
+
+                    <div class="login-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Milestone-based project tracking
+                    </span>
+
+                </div>
+
+
+                <div class="login-feature">
+
+                    <div class="login-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Submission approval workflow
+                    </span>
+
+                </div>
+
+
+                <div class="login-feature">
+
+                    <div class="login-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Escrow and transaction tracking
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="login-form-section">
+
+            <h2>
+                Welcome back
+            </h2>
+
+            <p class="login-subtitle">
+                Sign in to continue to your EscrowLite account.
+            </p>
+
+
+            <div id="loginMessage"
+                 class="login-message">
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            class="login-input"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            class="login-input password-input"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                        <span
+                            class="password-toggle"
+                            id="togglePassword">
+                            SHOW
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton">
+
+                    Sign In
+
+                </button>
+
+
+            </form>
+
+
+            <!-- REGISTER LINK -->
+
+            <div class="register-link">
+
+                Don't have an account?
+
+                <a href="/register">
+                    Create an account
+                </a>
+
+            </div>
+
+
+            <div class="login-footer">
+
+                EscrowLite © 2026
+
+                <br>
+
+                Milestone-Based Freelance Release Tracker
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<script src="/js/login.js"></script>
+
+</body>
+
+</html>

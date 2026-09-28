@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Freelancer Dashboard | EscrowLite</title>
+
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">E</div>
+
+            <div>
+                <h2>EscrowLite</h2>
+                <span>Freelance Platform</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a class="nav active" href="/freelancer-dashboard">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a class="nav" href="#">
+                <span>▣</span>
+                My Projects
+            </a>
+
+            <a class="nav" href="#">
+                <span>◆</span>
+                My Milestones
+            </a>
+
+            <a class="nav" href="#">
+                <span>↑</span>
+                Submit Work
+            </a>
+
+            <a class="nav" href="#">
+                <span>✓</span>
+                Submissions
+            </a>
+
+            <a class="nav" href="#">
+                <span>₹</span>
+                Payments
+            </a>
+
+        </nav>
+
+        <button class="logout" id="logoutButton">
+            ↪ &nbsp; Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+
+                <div class="eyebrow">
+                    FREELANCER PORTAL
+                </div>
+
+                <h1>Dashboard</h1>
+
+                <p>
+                    Manage your projects, milestones and earnings.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="avatar" id="avatar">
+                    S
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        Freelancer
+                    </strong>
+
+                    <small>
+                        Freelancer Account
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME -->
+        <section class="welcome freelancer-welcome">
+
+            <div>
+
+                <span class="welcome-tag">
+                    FREELANCER WORKSPACE
+                </span>
+
+                <h2 id="welcomeName">
+                    Welcome back!
+                </h2>
+
+                <p>
+                    Track your assigned work, deadlines,
+                    submissions and payments.
+                </p>
+
+            </div>
+
+            <div class="welcome-symbol">
+                F
+            </div>
+
+        </section>
+
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat">
+
+                <div class="stat-icon purple">
+                    ▣
+                </div>
+
+                <div>
+                    <span>My Projects</span>
+                    <strong id="projectCount">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon orange">
+                    ◆
+                </div>
+
+                <div>
+                    <span>Active Milestones</span>
+                    <strong id="milestoneCount">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon blue">
+                    ↑
+                </div>
+
+                <div>
+                    <span>Submissions</span>
+                    <strong id="submissionCount">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-icon green">
+                    ₹
+                </div>
+
+                <div>
+                    <span>Total Earnings</span>
+                    <strong id="earningAmount">₹0</strong>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GRID -->
+        <section class="dashboard-grid">
+
+
+            <!-- PROJECTS -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="section-label">
+                            WORK
+                        </span>
+
+                        <h3>My Projects</h3>
+                    </div>
+
+                    <span class="view-link">
+                        View All
+                    </span>
+
+                </div>
+
+                <div id="projectList">
+
+                    <div class="loading">
+                        Loading projects...
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DEADLINES -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <span class="section-label">
+                            DEADLINES
+                        </span>
+
+                        <h3>Upcoming Milestones</h3>
+                    </div>
+
+                </div>
+
+                <div id="milestoneList">
+
+                    <div class="empty">
+                        No upcoming milestones
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PAYMENT -->
+        <section class="panel payment-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="section-label">
+                        PAYMENTS
+                    </span>
+
+                    <h3>Payment Progress</h3>
+                </div>
+
+            </div>
+
+            <div class="payment-progress">
+
+                <div class="payment-info">
+
+                    <span>
+                        Completed escrow payments
+                    </span>
+
+                    <strong id="paymentStatus">
+                        ₹0
+                    </strong>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            EscrowLite © 2026
+            <span>•</span>
+            Milestone-Based Freelance Release Tracker
+        </footer>
+
+    </main>
+
+</div>
+
+<script src="/js/freelancer-dashboard.js"></script>
+
+</body>
+</html>

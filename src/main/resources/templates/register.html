@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>EscrowLite | Register</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css">
+
+    <style>
+
+        .register-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 950px;
+            min-height: 580px;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+        }
+
+        /* =========================
+           LEFT BRAND SECTION
+           ========================= */
+
+        .register-brand {
+            background: linear-gradient(
+                145deg,
+                #3730a3,
+                #4f46e5
+            );
+            color: white;
+            padding: 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-brand::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            right: -100px;
+            bottom: -100px;
+        }
+
+        .register-brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 45px;
+        }
+
+        .register-brand-logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .register-brand-logo h1 {
+            font-size: 21px;
+        }
+
+        .register-brand-logo span {
+            display: block;
+            font-size: 11px;
+            color: #dbeafe;
+            margin-top: 3px;
+        }
+
+        .register-brand h2 {
+            font-size: 32px;
+            line-height: 1.25;
+            max-width: 380px;
+            margin-bottom: 18px;
+        }
+
+        .register-brand-description {
+            color: #dbeafe;
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 390px;
+        }
+
+        .register-features {
+            margin-top: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .register-feature {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 12px;
+            color: #eef2ff;
+        }
+
+        .register-feature-icon {
+            width: 27px;
+            height: 27px;
+            border-radius: 7px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           FORM SECTION
+           ========================= */
+
+        .register-form-section {
+            padding: 45px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .register-form-section h2 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .register-subtitle {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           FORM
+           ========================= */
+
+        .register-form-group {
+            margin-bottom: 15px;
+        }
+
+        .register-form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #374151;
+        }
+
+        .register-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .register-input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .register-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 0 13px 0 40px;
+            outline: none;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .register-input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+
+        .register-password-input {
+            padding-right: 65px;
+        }
+
+        .register-password-toggle {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4f46e5;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            z-index: 5;
+        }
+
+        .register-password-toggle:hover {
+            color: #3730a3;
+        }
+
+
+        /* =========================
+           ROLE SELECTION
+           ========================= */
+
+        .role-label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .role-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .role-card {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            transition: 0.2s;
+        }
+
+        .role-card:hover {
+            border-color: #818cf8;
+        }
+
+        .role-option input:checked + .role-card {
+            border-color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .role-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4f46e5;
+            font-size: 13px;
+        }
+
+        .role-card strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .role-card span {
+            display: block;
+            color: #6b7280;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+
+        /* =========================
+           MESSAGE
+           ========================= */
+
+        .register-message {
+            display: none;
+            margin-bottom: 15px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .register-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .register-message.success {
+            display: block;
+            background: #dcfce7;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+
+        /* =========================
+           BUTTON
+           ========================= */
+
+        .register-button {
+            width: 100%;
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 5px;
+        }
+
+        .register-button:hover {
+            background: #3730a3;
+        }
+
+        .register-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+
+        /* =========================
+           LOGIN LINK
+           ========================= */
+
+        .login-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .login-link a {
+            color: #4f46e5;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            color: #3730a3;
+        }
+
+
+        /* =========================
+           FOOTER
+           ========================= */
+
+        .register-footer {
+            margin-top: 18px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 9px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 750px) {
+
+            .register-page {
+                padding: 15px;
+            }
+
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+
+            .register-brand {
+                padding: 35px;
+            }
+
+            .register-brand h2 {
+                font-size: 25px;
+            }
+
+            .register-features {
+                display: none;
+            }
+
+            .register-brand-logo {
+                margin-bottom: 25px;
+            }
+
+            .register-form-section {
+                padding: 35px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="register-page">
+
+    <div class="register-container">
+
+
+        <!-- =========================
+             LEFT SIDE
+             ========================= -->
+
+        <section class="register-brand">
+
+            <div class="register-brand-logo">
+
+                <div class="register-brand-logo-icon">
+                    E
+                </div>
+
+                <div>
+
+                    <h1>EscrowLite</h1>
+
+                    <span>
+                        Milestone-Based Freelance Tracker
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <h2>
+                Start managing
+                freelance projects
+                securely.
+            </h2>
+
+
+            <p class="register-brand-description">
+
+                Create your EscrowLite account and
+                manage projects, milestones,
+                submissions and payments through
+                a centralized platform.
+
+            </p>
+
+
+            <div class="register-features">
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Secure account registration
+                    </span>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Choose Client or Freelancer role
+                    </span>
+
+                </div>
+
+
+                <div class="register-feature">
+
+                    <div class="register-feature-icon">
+                        ✓
+                    </div>
+
+                    <span>
+                        Track milestone-based payments
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT SIDE
+             ========================= -->
+
+        <section class="register-form-section">
+
+            <h2>
+                Create your account
+            </h2>
+
+            <p class="register-subtitle">
+                Register to start using EscrowLite.
+            </p>
+
+
+            <!-- Message -->
+
+            <div id="registerMessage"
+                 class="register-message">
+            </div>
+
+
+            <!-- Registration Form -->
+
+            <form id="registerForm">
+
+
+                <!-- NAME -->
+
+                <div class="register-form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            👤
+                        </span>
+
+                        <input
+                            type="text"
+                            id="name"
+                            class="register-input"
+                            placeholder="Enter your full name"
+                            minlength="2"
+                            maxlength="50"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="register-form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            ✉
+                        </span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            class="register-input"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="register-form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            class="register-input register-password-input"
+                            placeholder="Minimum 6 characters"
+                            minlength="6"
+                            required
+                        >
+
+                        <span
+                            class="register-password-toggle"
+                            id="togglePassword">
+                            SHOW
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="register-form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <div class="register-input-wrapper">
+
+                        <span class="register-input-icon">
+                            ●
+                        </span>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            class="register-input register-password-input"
+                            placeholder="Re-enter your password"
+                            minlength="6"
+                            required
+                        >
+
+                        <span
+                            class="register-password-toggle"
+                            id="toggleConfirmPassword">
+                            SHOW
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROLE -->
+
+                <div class="register-form-group">
+
+                    <label class="role-label">
+                        Account Type
+                    </label>
+
+                    <div class="role-options">
+
+
+                        <!-- CLIENT -->
+
+                        <div class="role-option">
+
+                            <input
+                                type="radio"
+                                id="clientRole"
+                                name="role"
+                                value="CLIENT"
+                                required
+                            >
+
+                            <label
+                                for="clientRole"
+                                class="role-card">
+
+                                <div class="role-icon">
+                                    C
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Client
+                                    </strong>
+
+                                    <span>
+                                        Manage projects
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- FREELANCER -->
+
+                        <div class="role-option">
+
+                            <input
+                                type="radio"
+                                id="freelancerRole"
+                                name="role"
+                                value="FREELANCER"
+                                required
+                            >
+
+                            <label
+                                for="freelancerRole"
+                                class="role-card">
+
+                                <div class="role-icon">
+                                    F
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Freelancer
+                                    </strong>
+
+                                    <span>
+                                        Complete projects
+                                    </span>
+
+                                </div>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                    id="registerButton">
+
+                    Create Account
+
+                </button>
+
+
+            </form>
+
+
+            <!-- LOGIN LINK -->
+
+            <div class="login-link">
+
+                Already have an account?
+
+                <a href="/login">
+                    Sign in
+                </a>
+
+            </div>
+
+
+            <div class="register-footer">
+
+                EscrowLite © 2026
+
+                <br>
+
+                Milestone-Based Freelance Release Tracker
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<script src="/js/register.js"></script>
+
+</body>
+
+</html>
