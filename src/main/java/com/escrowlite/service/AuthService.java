@@ -7,6 +7,7 @@ import com.escrowlite.dto.LoginRequest;
 import com.escrowlite.dto.LoginResponse;
 import com.escrowlite.entity.User;
 import com.escrowlite.repository.UserRepository;
+import com.escrowlite.exception.BadRequestException;
 
 @Service
 public class AuthService {
@@ -24,7 +25,7 @@ public class AuthService {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new BadRequestException(
                                 "Invalid email or password"));
 
         String enteredPassword = request.getPassword();
@@ -77,7 +78,7 @@ public class AuthService {
 
         if (!passwordMatches) {
 
-            throw new RuntimeException(
+            throw new BadRequestException(
                     "Invalid email or password");
         }
 

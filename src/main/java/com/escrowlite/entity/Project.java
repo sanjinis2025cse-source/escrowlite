@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -74,6 +75,7 @@ public class Project {
             orphanRemoval = true)
     private List<Milestone> milestones = new ArrayList<>();
 
+    @JsonCreator
     public Project() {
     }
 

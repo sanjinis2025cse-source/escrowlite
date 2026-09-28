@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.escrowlite.entity.User;
 import com.escrowlite.repository.UserRepository;
+import com.escrowlite.exception.ConflictException;
+import com.escrowlite.exception.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -23,7 +25,7 @@ public class UserService {
     public User createUser(User user) {
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already registered");
+            throw new ConflictException("An account with this email already exists");
         }
 
         user.setPassword(
@@ -40,7 +42,7 @@ public class UserService {
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "User not found with id: " + id));
     }
 }
