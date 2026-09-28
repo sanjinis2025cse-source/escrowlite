@@ -40,4 +40,9 @@ public class HomeController {
     public String projects() {
         return "projects";
     }
+
+    @GetMapping("/milestones")
+    public String milestones() {
+        return "milestones";
+    }
 }
