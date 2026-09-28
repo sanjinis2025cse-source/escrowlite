@@ -45,4 +45,15 @@ public class HomeController {
     public String milestones() {
         return "milestones";
     }
+
+    @GetMapping("/submissions")
+    public String submissions() {
+        return "submissions";
+    }
+
+    @GetMapping("/escrow")
+    public String escrow() { return "escrow"; }
+
+    @GetMapping("/transactions")
+    public String transactions() { return "transactions"; }
 }

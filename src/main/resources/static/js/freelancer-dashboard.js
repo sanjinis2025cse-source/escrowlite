@@ -1,129 +1,224 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    loadUser();
-
-    loadFreelancerData();
-
+    checkUser();
+    loadDashboardData();
     setupLogout();
 
 });
 
 
-function loadUser() {
+/* =========================================
+   CHECK LOGGED-IN USER
+   ========================================= */
 
-    const name =
-        sessionStorage.getItem("userName");
+function checkUser() {
 
-    const role =
-        sessionStorage.getItem("userRole");
+    const userId = sessionStorage.getItem("userId");
+    const userName = sessionStorage.getItem("userName");
+    const userEmail = sessionStorage.getItem("userEmail");
+    const userRole = sessionStorage.getItem("userRole");
 
+    if (!userId || !userRole) {
 
-    if (role !== "FREELANCER") {
-
-        window.location.href =
-            "/login";
-
+        window.location.href = "/login";
         return;
     }
 
+    if (userRole !== "FREELANCER") {
 
-    if (name) {
+        window.location.href = "/login";
+        return;
+    }
 
-        document.getElementById("profileName")
-            .textContent = name;
+    const profileName =
+        document.getElementById("profileName");
 
-        document.getElementById("welcomeName")
-            .textContent =
-            "Welcome back, " + name;
+    const profileEmail =
+        document.getElementById("profileEmail");
 
-        document.getElementById("avatar")
-            .textContent =
+    const welcomeName =
+        document.getElementById("welcomeName");
+
+    const profileAvatar =
+        document.getElementById("profileAvatar");
+
+
+    if (profileName) {
+        profileName.textContent =
+            userName || "Freelancer";
+    }
+
+
+    if (profileEmail) {
+        profileEmail.textContent =
+            userEmail || "";
+    }
+
+
+    if (welcomeName) {
+        welcomeName.textContent =
+            userName || "Freelancer";
+    }
+
+
+    if (profileAvatar) {
+
+        const name =
+            userName || "F";
+
+        profileAvatar.textContent =
             name.charAt(0).toUpperCase();
-
     }
 
 }
 
 
-async function loadFreelancerData() {
+/* =========================================
+   LOAD DASHBOARD DATA
+   ========================================= */
+
+async function loadDashboardData() {
 
     try {
 
-        const projectsResponse =
-            await fetch("/api/projects");
+        const userId =
+            sessionStorage.getItem("userId");
 
-        const milestonesResponse =
-            await fetch("/api/milestones");
 
-        const submissionsResponse =
-            await fetch("/api/submissions");
+        if (!userId) {
 
-        const transactionsResponse =
-            await fetch("/api/transactions");
+            window.location.href = "/login";
+            return;
+        }
+
+
+        const projectsResponse = await fetch(
+            `/api/projects/freelancer/${encodeURIComponent(userId)}`
+        );
+
+
+        if (!projectsResponse.ok) {
+            throw new Error(
+                "Unable to load projects"
+            );
+        }
 
 
         const projects =
             await projectsResponse.json();
 
-        const milestones =
-            await milestonesResponse.json();
 
-        const submissions =
-            await submissionsResponse.json();
-
-        const transactions =
-            await transactionsResponse.json();
+        const freelancerProjects =
+            Array.isArray(projects)
+                ? projects
+                : [];
 
 
-        document.getElementById("projectCount")
-            .textContent = projects.length;
+        const milestoneGroups = await Promise.all(freelancerProjects.map(async project => {
+            const response = await fetch(`/api/milestones/project/${project.id}`);
+            if (!response.ok) throw new Error("Unable to load milestones");
+            return response.json();
+        }));
+        const allMilestones = milestoneGroups.flat();
+        const submissionGroups = await Promise.all(allMilestones.map(async milestone => {
+            const response = await fetch(`/api/submissions/milestone/${milestone.id}`);
+            if (!response.ok) throw new Error("Unable to load submissions");
+            return response.json();
+        }));
+        const allSubmissions = submissionGroups.flat();
+        const allTransactions = await fetch("/api/transactions").then(async response => {
+            if (!response.ok) throw new Error("Unable to load transactions");
+            return response.json();
+        });
 
 
-        document.getElementById("milestoneCount")
-            .textContent = milestones.filter(
-                m =>
-                    m.status === "PENDING" ||
-                    m.status === "IN_PROGRESS"
-            ).length;
+        /*
+         * Filter milestones belonging to
+         * freelancer's projects.
+         */
 
-
-        document.getElementById("submissionCount")
-            .textContent = submissions.length;
-
-
-        const earnings =
-            transactions.reduce(
-                (sum, transaction) =>
-                    sum +
-                    Number(
-                        transaction.amount || 0
-                    ),
-                0
+        const projectIds =
+            freelancerProjects.map(
+                project => project.id
             );
 
 
-        document.getElementById("earningAmount")
-            .textContent =
-            "₹" +
-            earnings.toLocaleString("en-IN");
+        const freelancerMilestones =
+            allMilestones.filter(
+                milestone => {
+
+                    if (
+                        !milestone.project ||
+                        !milestone.project.id
+                    ) {
+                        return false;
+                    }
+
+                    return projectIds.includes(
+                        milestone.project.id
+                    );
+                }
+            );
 
 
-        document.getElementById("paymentStatus")
-            .textContent =
-            "₹" +
-            earnings.toLocaleString("en-IN");
+        /*
+         * Filter submissions belonging to
+         * freelancer's milestones.
+         */
+
+        const milestoneIds =
+            freelancerMilestones.map(
+                milestone => milestone.id
+            );
 
 
-        displayProjects(projects);
+        const freelancerSubmissions =
+            allSubmissions.filter(
+                submission => {
 
-        displayMilestones(milestones);
+                    if (
+                        !submission.milestone ||
+                        !submission.milestone.id
+                    ) {
+                        return false;
+                    }
+
+                    return milestoneIds.includes(
+                        submission.milestone.id
+                    );
+                }
+            );
+
+
+        updateStatistics(
+            freelancerProjects,
+            freelancerMilestones,
+            freelancerSubmissions,
+            allTransactions.filter(transaction =>
+                projectIds.includes(transaction.escrowRelease?.milestone?.project?.id)
+            )
+        );
+
+
+        displayProjects(
+            freelancerProjects
+        );
+
+
+        displayMilestones(
+            freelancerMilestones
+        );
 
 
     } catch (error) {
 
         console.error(
-            "Freelancer dashboard error:",
+            "Dashboard loading error:",
             error
+        );
+
+        showLoadingError(
+            "Unable to load dashboard data."
         );
 
     }
@@ -131,103 +226,288 @@ async function loadFreelancerData() {
 }
 
 
+/* =========================================
+   UPDATE STATISTICS
+   ========================================= */
+
+function updateStatistics(
+    projects,
+    milestones,
+    submissions,
+    transactions
+) {
+
+    const projectCount =
+        document.getElementById("projectCount");
+
+    const milestoneCount =
+        document.getElementById("milestoneCount");
+
+    const submissionCount =
+        document.getElementById("submissionCount");
+
+    const earningsAmount =
+        document.getElementById("earningsAmount");
+
+
+    if (projectCount) {
+
+        projectCount.textContent =
+            projects.length;
+    }
+
+
+    if (milestoneCount) {
+
+        milestoneCount.textContent =
+            milestones.length;
+    }
+
+
+    if (submissionCount) {
+
+        submissionCount.textContent =
+            submissions.length;
+    }
+
+
+    /*
+     * Calculate completed earnings.
+     */
+
+    let earnings = 0;
+
+
+    transactions.forEach(
+        transaction => {
+
+            if (
+                transaction.status ===
+                "COMPLETED"
+            ) {
+
+                const amount =
+                    Number(
+                        transaction.amount || 0
+                    );
+
+                earnings += amount;
+            }
+
+        }
+    );
+
+
+    if (earningsAmount) {
+
+        earningsAmount.textContent =
+            formatCurrency(earnings);
+    }
+
+}
+
+
+/* =========================================
+   DISPLAY PROJECTS
+   ========================================= */
+
 function displayProjects(projects) {
 
-    const list =
-        document.getElementById("projectList");
+    const projectsList =
+        document.getElementById("projectsList");
 
 
-    if (!projects.length) {
+    if (!projectsList) {
+        return;
+    }
 
-        list.innerHTML =
-            '<div class="empty">No assigned projects.</div>';
+
+    if (!projects || projects.length === 0) {
+
+        projectsList.innerHTML = `
+
+            <div class="loading-state">
+
+                No projects assigned yet.
+
+            </div>
+
+        `;
 
         return;
     }
 
 
-    list.innerHTML =
-        projects.slice(0, 5).map(project => `
+    projectsList.innerHTML =
+        projects.map(
+            project => `
 
-            <div class="project-item">
+                <div class="dashboard-item">
 
-                <div>
+                    <div>
 
-                    <strong>
-                        ${escapeHtml(project.title)}
-                    </strong>
+                        <strong>
+                            ${escapeHtml(
+                                project.title ||
+                                "Untitled Project"
+                            )}
+                        </strong>
 
-                    <span>
-                        Budget:
-                        ₹${Number(
-                            project.budget || 0
-                        ).toLocaleString("en-IN")}
+                        <p>
+                            ${escapeHtml(
+                                project.description ||
+                                "No description available."
+                            )}
+                        </p>
+
+                    </div>
+
+                    <span class="status-badge">
+
+                        ${formatStatus(
+                            project.status
+                        )}
+
                     </span>
 
                 </div>
 
-                <div class="project-status">
-                    ${project.status}
-                </div>
-
-            </div>
-
-        `).join("");
+            `
+        ).join("");
 
 }
 
+
+/* =========================================
+   DISPLAY MILESTONES
+   ========================================= */
 
 function displayMilestones(milestones) {
 
-    const list =
-        document.getElementById("milestoneList");
+    const milestonesList =
+        document.getElementById("milestonesList");
 
 
-    if (!milestones.length) {
+    if (!milestonesList) {
+        return;
+    }
 
-        list.innerHTML =
-            '<div class="empty">No upcoming milestones.</div>';
+
+    if (!milestones || milestones.length === 0) {
+
+        milestonesList.innerHTML = `
+
+            <div class="loading-state">
+
+                No milestones available.
+
+            </div>
+
+        `;
 
         return;
     }
 
 
-    list.innerHTML =
-        milestones.slice(0, 5).map(milestone => `
+    milestonesList.innerHTML =
+        milestones.map(
+            milestone => `
 
-            <div class="project-item">
+                <div class="dashboard-item">
 
-                <div>
+                    <div>
 
-                    <strong>
-                        ${escapeHtml(milestone.title)}
-                    </strong>
+                        <strong>
+                            ${escapeHtml(
+                                milestone.title ||
+                                "Untitled Milestone"
+                            )}
+                        </strong>
 
-                    <span>
-                        Deadline:
-                        ${milestone.deadline || "Not specified"}
+                        <p>
+                            Amount:
+                            ${formatCurrency(
+                                milestone.amount || 0
+                            )}
+                        </p>
+
+                    </div>
+
+                    <span class="status-badge">
+
+                        ${formatStatus(
+                            milestone.status
+                        )}
+
                     </span>
 
                 </div>
 
-                <div class="project-status">
-                    ${milestone.status}
-                </div>
-
-            </div>
-
-        `).join("");
+            `
+        ).join("");
 
 }
 
 
+/* =========================================
+   SHOW ERROR
+   ========================================= */
+
+function showLoadingError(message) {
+
+    const projectsList =
+        document.getElementById("projectsList");
+
+    const milestonesList =
+        document.getElementById("milestonesList");
+
+
+    if (projectsList) {
+
+        projectsList.innerHTML = `
+
+            <div class="loading-state">
+
+                ${escapeHtml(message)}
+
+            </div>
+
+        `;
+    }
+
+
+    if (milestonesList) {
+
+        milestonesList.innerHTML = `
+
+            <div class="loading-state">
+
+                ${escapeHtml(message)}
+
+            </div>
+
+        `;
+    }
+
+}
+
+
+/* =========================================
+   LOGOUT
+   ========================================= */
+
 function setupLogout() {
 
-    const button =
+    const logoutButton =
         document.getElementById("logoutButton");
 
 
-    button.addEventListener(
+    if (!logoutButton) {
+        return;
+    }
+
+
+    logoutButton.addEventListener(
         "click",
         async () => {
 
@@ -240,13 +520,19 @@ function setupLogout() {
                     }
                 );
 
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
             } finally {
 
                 sessionStorage.clear();
 
                 window.location.href =
                     "/login";
-
             }
 
         }
@@ -255,13 +541,70 @@ function setupLogout() {
 }
 
 
+/* =========================================
+   FORMAT CURRENCY
+   ========================================= */
+
+function formatCurrency(amount) {
+
+    const value =
+        Number(amount || 0);
+
+
+    return "₹" +
+        value.toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+/* =========================================
+   FORMAT STATUS
+   ========================================= */
+
+function formatStatus(status) {
+
+    if (!status) {
+        return "Unknown";
+    }
+
+
+    return status
+        .toString()
+        .replaceAll("_", " ")
+        .toLowerCase()
+        .replace(
+            /\b\w/g,
+            character =>
+                character.toUpperCase()
+        );
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+   ========================================= */
+
 function escapeHtml(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+    }
+
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }

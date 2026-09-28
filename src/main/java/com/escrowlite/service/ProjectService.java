@@ -2,11 +2,15 @@ package com.escrowlite.service;
 
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.escrowlite.entity.Project;
+import com.escrowlite.entity.ProjectStatus;
 import com.escrowlite.entity.User;
 import com.escrowlite.entity.UserRole;
+import com.escrowlite.exception.BadRequestException;
+import com.escrowlite.exception.ResourceNotFoundException;
 import com.escrowlite.repository.ProjectRepository;
 import com.escrowlite.repository.UserRepository;
 
@@ -15,94 +19,71 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
 
-    public ProjectService(ProjectRepository projectRepository,
-                          UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository,
+                          CurrentUserService currentUserService) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
     }
 
     public Project createProject(Project project) {
-
-        if (project.getClient() == null ||
-                project.getClient().getId() == null) {
-            throw new RuntimeException("Client is required");
+        User client = currentUserService.requireRole(UserRole.CLIENT);
+        if (project.getFreelancer() == null || project.getFreelancer().getId() == null) {
+            throw new BadRequestException("Freelancer is required");
         }
-
-        if (project.getFreelancer() == null ||
-                project.getFreelancer().getId() == null) {
-            throw new RuntimeException("Freelancer is required");
-        }
-
-        User client = userRepository.findById(
-                project.getClient().getId()
-        ).orElseThrow(() ->
-                new RuntimeException("Client not found")
-        );
-
-        User freelancer = userRepository.findById(
-                project.getFreelancer().getId()
-        ).orElseThrow(() ->
-                new RuntimeException("Freelancer not found")
-        );
-
-        if (client.getRole() != UserRole.CLIENT) {
-            throw new RuntimeException(
-                    "Selected client must have CLIENT role"
-            );
-        }
-
+        User freelancer = userRepository.findById(project.getFreelancer().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Freelancer not found"));
         if (freelancer.getRole() != UserRole.FREELANCER) {
-            throw new RuntimeException(
-                    "Selected freelancer must have FREELANCER role"
-            );
+            throw new BadRequestException("Selected freelancer must have FREELANCER role");
         }
-
         project.setClient(client);
         project.setFreelancer(freelancer);
-
         return projectRepository.save(project);
     }
 
     public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+        User user = currentUserService.getCurrentUser();
+        return user.getRole() == UserRole.CLIENT
+                ? projectRepository.findByClientId(user.getId())
+                : projectRepository.findByFreelancerId(user.getId());
     }
 
     public Project getProjectById(Long id) {
-
-        return projectRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Project not found with id: " + id
-                        )
-                );
+        Project project = findProject(id);
+        currentUserService.requireProjectParticipant(project);
+        return project;
     }
 
     public List<Project> getProjectsByClient(Long clientId) {
-
-        return projectRepository.findByClientId(clientId);
+        User user = currentUserService.requireRole(UserRole.CLIENT);
+        if (!user.getId().equals(clientId)) throw new AccessDeniedException("You do not have access to these projects");
+        return projectRepository.findByClientId(user.getId());
     }
 
     public List<Project> getProjectsByFreelancer(Long freelancerId) {
-
-        return projectRepository.findByFreelancerId(freelancerId);
+        User user = currentUserService.requireRole(UserRole.FREELANCER);
+        if (!user.getId().equals(freelancerId)) throw new AccessDeniedException("You do not have access to these projects");
+        return projectRepository.findByFreelancerId(user.getId());
     }
 
-    public Project updateProjectStatus(
-            Long id,
-            com.escrowlite.entity.ProjectStatus status) {
-
-        Project project = getProjectById(id);
-
+    public Project updateProjectStatus(Long id, ProjectStatus status) {
+        Project project = findProject(id);
+        currentUserService.requireClientOwner(project);
+        if (status == null) throw new BadRequestException("Project status is required");
         project.setStatus(status);
-
         return projectRepository.save(project);
     }
 
     public void deleteProject(Long id) {
-
-        Project project = getProjectById(id);
-
+        Project project = findProject(id);
+        currentUserService.requireClientOwner(project);
         projectRepository.delete(project);
+    }
+
+    private Project findProject(Long id) {
+        return projectRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Project not found with id: " + id));
     }
 }

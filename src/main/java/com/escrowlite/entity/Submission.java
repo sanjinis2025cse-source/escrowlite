@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -57,6 +58,11 @@ public class Submission {
             "submissions"
     })
     private Milestone milestone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "submitted_by_user_id")
+    @JsonIgnoreProperties({"password", "clientProjects", "freelancerProjects"})
+    private User submittedBy;
 
     public Submission() {
     }
@@ -124,4 +130,8 @@ public class Submission {
     public void setMilestone(Milestone milestone) {
         this.milestone = milestone;
     }
+
+    public User getSubmittedBy() { return submittedBy; }
+
+    public void setSubmittedBy(User submittedBy) { this.submittedBy = submittedBy; }
 }

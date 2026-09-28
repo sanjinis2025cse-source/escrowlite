@@ -1,155 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Dashboard - EscrowLite</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Freelancer Dashboard | EscrowLite</title>
-
-    <link rel="stylesheet"
-          href="/css/dashboard.css">
-
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-
 
 <body>
 
-<div class="app">
+<div class="dashboard-container">
 
     <aside class="sidebar">
 
-        <div class="logo">
-
-            <div class="logo-icon">
-                E
-            </div>
-
-            <div>
-
-                <h2>EscrowLite</h2>
-
-                <span>
-                    Freelance Platform
-                </span>
-
-            </div>
-
+        <div class="sidebar-brand">
+            <h2>EscrowLite</h2>
+            <p>Freelancer Portal</p>
         </div>
 
+        <nav class="sidebar-nav">
 
-        <nav>
-
-            <a class="nav active"
-               href="/freelancer-dashboard">
-
-                <span>⌂</span>
-                Dashboard
-
-            </a>
-
-
-            <a class="nav"
-               href="/projects">
-
+            <a href="/freelancer-dashboard" class="nav-item active">
                 <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="/projects" class="nav-item">
+                <span>▤</span>
                 My Projects
-
             </a>
 
-
-            <a class="nav"
-               href="/milestones">
-
-                <span>◆</span>
+            <a href="/milestones" class="nav-item">
+                <span>◈</span>
                 My Milestones
-
             </a>
 
-
-            <a class="nav"
-               href="#">
-
-                <span>↑</span>
-                Submit Work
-
-            </a>
-
-
-            <a class="nav"
-               href="#">
-
+            <a href="/submissions" class="nav-item">
                 <span>✓</span>
-                Submissions
-
+                Submit Work
             </a>
 
+            <a href="/submissions" class="nav-item">
+                <span>☑</span>
+                Submissions
+            </a>
 
-            <a class="nav"
-               href="#">
-
+            <a href="/transactions" class="nav-item">
                 <span>₹</span>
                 Payments
-
             </a>
 
         </nav>
 
-
-        <button class="logout"
-                id="logoutButton">
-
-            ↪ &nbsp; Logout
-
-        </button>
+        <div class="sidebar-footer">
+            <button id="logoutButton" class="logout-button">
+                Logout
+            </button>
+        </div>
 
     </aside>
 
 
-    <main class="main">
+    <main class="main-content">
 
-        <header class="header">
+        <header class="dashboard-header">
 
             <div>
-
-                <div class="eyebrow">
-                    FREELANCER PORTAL
-                </div>
-
-                <h1>
-                    Dashboard
-                </h1>
-
-                <p>
-                    Manage your projects, milestones and earnings.
-                </p>
-
+                <h1>Freelancer Dashboard</h1>
+                <p>Manage your projects, milestones and submissions.</p>
             </div>
 
+            <div class="profile-area">
 
-            <div class="profile">
-
-                <div class="avatar"
-                     id="avatar">
-
-                    S
-
+                <div class="profile-avatar" id="profileAvatar">
+                    F
                 </div>
 
-
                 <div>
-
-                    <strong id="profileName">
-                        Freelancer
-                    </strong>
-
-                    <small>
-                        Freelancer Account
+                    <strong id="profileName">Freelancer</strong>
+                    <small id="profileEmail">
+                        freelancer@email.com
                     </small>
-
                 </div>
 
             </div>
@@ -157,120 +89,70 @@
         </header>
 
 
-        <section class="welcome freelancer-welcome">
+        <section class="welcome-section">
 
             <div>
-
-                <span class="welcome-tag">
-                    FREELANCER WORKSPACE
-                </span>
-
-
-                <h2 id="welcomeName">
-                    Welcome back!
+                <h2>
+                    Welcome back, <span id="welcomeName">Freelancer</span>!
                 </h2>
 
-
                 <p>
-                    Track your assigned work, deadlines,
-                    submissions and payments.
+                    Track your assigned projects and submit completed work.
                 </p>
-
             </div>
 
-
-            <div class="welcome-symbol">
-                F
-            </div>
+            <a href="/submissions" class="primary-button">
+                + Submit Work
+            </a>
 
         </section>
 
 
-        <section class="stats">
+        <section class="stats-grid">
 
-            <div class="stat">
+            <div class="stat-card">
 
-                <div class="stat-icon purple">
-                    ▣
-                </div>
-
+                <div class="stat-icon">▤</div>
 
                 <div>
-
-                    <span>
-                        My Projects
-                    </span>
-
-                    <strong id="projectCount">
-                        0
-                    </strong>
-
+                    <span class="stat-label">Projects</span>
+                    <h3 id="projectCount">0</h3>
                 </div>
 
             </div>
 
 
-            <div class="stat">
+            <div class="stat-card">
 
-                <div class="stat-icon orange">
-                    ◆
-                </div>
-
+                <div class="stat-icon">◈</div>
 
                 <div>
-
-                    <span>
-                        Active Milestones
-                    </span>
-
-                    <strong id="milestoneCount">
-                        0
-                    </strong>
-
+                    <span class="stat-label">Milestones</span>
+                    <h3 id="milestoneCount">0</h3>
                 </div>
 
             </div>
 
 
-            <div class="stat">
+            <div class="stat-card">
 
-                <div class="stat-icon blue">
-                    ↑
-                </div>
-
+                <div class="stat-icon">✓</div>
 
                 <div>
-
-                    <span>
-                        Submissions
-                    </span>
-
-                    <strong id="submissionCount">
-                        0
-                    </strong>
-
+                    <span class="stat-label">Submissions</span>
+                    <h3 id="submissionCount">0</h3>
                 </div>
 
             </div>
 
 
-            <div class="stat">
+            <div class="stat-card">
 
-                <div class="stat-icon green">
-                    ₹
-                </div>
-
+                <div class="stat-icon">₹</div>
 
                 <div>
-
-                    <span>
-                        Total Earnings
-                    </span>
-
-                    <strong id="earningAmount">
-                        ₹0
-                    </strong>
-
+                    <span class="stat-label">Earnings</span>
+                    <h3 id="earningsAmount">₹0</h3>
                 </div>
 
             </div>
@@ -278,38 +160,26 @@
         </section>
 
 
-        <section class="dashboard-grid">
+        <section class="dashboard-panels">
 
-            <div class="panel">
+            <div class="dashboard-panel">
 
                 <div class="panel-header">
 
                     <div>
-
-                        <span class="section-label">
-                            WORK
-                        </span>
-
-                        <h3>
-                            My Projects
-                        </h3>
-
+                        <h2>My Projects</h2>
+                        <p>Projects assigned to you.</p>
                     </div>
 
-
-                    <a href="/projects"
-                       class="view-link">
-
+                    <a href="/projects" class="panel-link">
                         View All
-
                     </a>
 
                 </div>
 
+                <div id="projectsList" class="project-list">
 
-                <div id="projectList">
-
-                    <div class="loading">
+                    <div class="loading-state">
                         Loading projects...
                     </div>
 
@@ -318,77 +188,25 @@
             </div>
 
 
-            <div class="panel">
+            <div class="dashboard-panel">
 
                 <div class="panel-header">
 
                     <div>
-
-                        <span class="section-label">
-                            DEADLINES
-                        </span>
-
-                        <h3>
-                            Upcoming Milestones
-                        </h3>
-
+                        <h2>My Milestones</h2>
+                        <p>Current milestone progress.</p>
                     </div>
 
-                </div>
-
-
-                <div id="milestoneList">
-
-                    <div class="empty">
-                        No upcoming milestones
-                    </div>
+                    <a href="/milestones" class="panel-link">
+                        View All
+                    </a>
 
                 </div>
 
-            </div>
+                <div id="milestonesList" class="project-list">
 
-        </section>
-
-
-        <section class="panel payment-panel">
-
-            <div class="panel-header">
-
-                <div>
-
-                    <span class="section-label">
-                        PAYMENTS
-                    </span>
-
-                    <h3>
-                        Payment Progress
-                    </h3>
-
-                </div>
-
-            </div>
-
-
-            <div class="payment-progress">
-
-                <div class="payment-info">
-
-                    <span>
-                        Completed escrow payments
-                    </span>
-
-                    <strong id="paymentStatus">
-                        ₹0
-                    </strong>
-
-                </div>
-
-
-                <div class="progress-bar">
-
-                    <div
-                        class="progress-fill"
-                        id="progressFill">
+                    <div class="loading-state">
+                        Loading milestones...
                     </div>
 
                 </div>
@@ -396,17 +214,6 @@
             </div>
 
         </section>
-
-
-        <footer>
-
-            EscrowLite © 2026
-
-            <span>•</span>
-
-            Milestone-Based Freelance Release Tracker
-
-        </footer>
 
     </main>
 
@@ -416,5 +223,4 @@
 <script src="/js/freelancer-dashboard.js"></script>
 
 </body>
-
 </html>

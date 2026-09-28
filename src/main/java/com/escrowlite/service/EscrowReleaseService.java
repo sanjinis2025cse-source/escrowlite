@@ -11,6 +11,9 @@ import com.escrowlite.entity.Milestone;
 import com.escrowlite.entity.MilestoneStatus;
 import com.escrowlite.entity.Submission;
 import com.escrowlite.entity.SubmissionStatus;
+import com.escrowlite.entity.Project;
+import com.escrowlite.entity.User;
+import com.escrowlite.entity.UserRole;
 import com.escrowlite.exception.BadRequestException;
 import com.escrowlite.exception.ResourceNotFoundException;
 import com.escrowlite.repository.EscrowReleaseRepository;
@@ -23,18 +26,23 @@ public class EscrowReleaseService {
     private final EscrowReleaseRepository escrowReleaseRepository;
     private final MilestoneRepository milestoneRepository;
     private final SubmissionRepository submissionRepository;
+    private final CurrentUserService currentUserService;
 
     public EscrowReleaseService(
             EscrowReleaseRepository escrowReleaseRepository,
             MilestoneRepository milestoneRepository,
-            SubmissionRepository submissionRepository) {
+            SubmissionRepository submissionRepository,
+            CurrentUserService currentUserService) {
 
         this.escrowReleaseRepository = escrowReleaseRepository;
         this.milestoneRepository = milestoneRepository;
         this.submissionRepository = submissionRepository;
+        this.currentUserService = currentUserService;
     }
 
     public EscrowRelease releaseEscrow(Long milestoneId) {
+
+        currentUserService.requireRole(UserRole.CLIENT);
 
         Milestone milestone = milestoneRepository
                 .findById(milestoneId)
@@ -44,6 +52,8 @@ public class EscrowReleaseService {
                                         + milestoneId
                         )
                 );
+
+        currentUserService.requireClientOwner(milestone.getProject());
 
         if (escrowReleaseRepository
                 .existsByMilestoneId(milestoneId)) {
@@ -100,32 +110,32 @@ public class EscrowReleaseService {
     }
 
     public List<EscrowRelease> getAllReleases() {
-
-        return escrowReleaseRepository.findAll();
+        User user = currentUserService.getCurrentUser();
+        return escrowReleaseRepository.findAll().stream()
+                .filter(release -> currentUserService.isParticipant(user,
+                        release.getMilestone().getProject()))
+                .toList();
     }
 
     public EscrowRelease getReleaseById(Long id) {
 
-        return escrowReleaseRepository.findById(id)
+        EscrowRelease release = escrowReleaseRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Escrow release not found with id: "
                                         + id
                         )
                 );
+        currentUserService.requireProjectParticipant(release.getMilestone().getProject());
+        return release;
     }
 
     public EscrowRelease getReleaseByMilestone(
             Long milestoneId) {
 
-        if (!milestoneRepository.existsById(milestoneId)) {
-
-            throw new ResourceNotFoundException(
-                    "Milestone not found with id: "
-                            + milestoneId
-            );
-        }
-
+        Milestone milestone = milestoneRepository.findById(milestoneId).orElseThrow(() ->
+                new ResourceNotFoundException("Milestone not found with id: " + milestoneId));
+        currentUserService.requireProjectParticipant(milestone.getProject());
         return escrowReleaseRepository
                 .findByMilestoneId(milestoneId)
                 .orElseThrow(() ->
