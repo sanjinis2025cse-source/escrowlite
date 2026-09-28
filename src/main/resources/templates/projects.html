@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Projects | EscrowLite</title>
+
+    <link rel="stylesheet"
+          href="/css/dashboard.css">
+
+    <style>
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .create-button {
+            background: #5b4df5;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .create-button:hover {
+            background: #493de0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+
+        .project-card {
+            background: white;
+            border: 1px solid #e4e7ed;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .project-card h3 {
+            margin: 0 0 10px;
+            font-size: 19px;
+        }
+
+        .project-description {
+            color: #7b8495;
+            font-size: 13px;
+            line-height: 1.6;
+            min-height: 45px;
+        }
+
+        .project-details {
+            margin-top: 18px;
+            display: grid;
+            gap: 9px;
+        }
+
+        .project-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .project-detail span:first-child {
+            color: #8992a5;
+        }
+
+        .project-detail strong {
+            color: #20283a;
+        }
+
+        .status-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #eeecff;
+            color: #574ae9;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .55);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 92%;
+            max-width: 520px;
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .close-button {
+            border: none;
+            background: #f0f2f6;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #dfe3ea;
+            border-radius: 8px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #5b4df5;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .cancel-button {
+            border: 1px solid #dfe3ea;
+            background: white;
+            padding: 11px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            border: none;
+            background: #5b4df5;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            color: #c0392b;
+        }
+
+        .message.success {
+            display: block;
+            background: #ebfaf2;
+            color: #218c57;
+        }
+
+        .empty-projects {
+            background: white;
+            border: 1px solid #e4e7ed;
+            border-radius: 16px;
+            padding: 50px;
+            text-align: center;
+            color: #8992a5;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                E
+            </div>
+
+            <div>
+                <h2>EscrowLite</h2>
+                <span>Freelance Platform</span>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a class="nav"
+               id="dashboardLink"
+               href="/dashboard">
+
+                <span>⌂</span>
+                Dashboard
+
+            </a>
+
+
+            <a class="nav active"
+               href="/projects">
+
+                <span>▣</span>
+                Projects
+
+            </a>
+
+
+            <a class="nav"
+               href="#">
+
+                <span>◆</span>
+                Milestones
+
+            </a>
+
+
+            <a class="nav"
+               href="#">
+
+                <span>✓</span>
+                Submissions
+
+            </a>
+
+
+            <a class="nav"
+               href="#">
+
+                <span>◇</span>
+                Escrow
+
+            </a>
+
+
+            <a class="nav"
+               href="#">
+
+                <span>₹</span>
+                Transactions
+
+            </a>
+
+        </nav>
+
+
+        <button class="logout"
+                id="logoutButton">
+
+            ↪ &nbsp; Logout
+
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="header">
+
+            <div>
+
+                <div class="eyebrow">
+                    PROJECT MANAGEMENT
+                </div>
+
+                <h1>Projects</h1>
+
+                <p id="pageDescription">
+                    Manage your freelance projects.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="avatar"
+                     id="avatar">
+                    U
+                </div>
+
+                <div>
+
+                    <strong id="profileName">
+                        User
+                    </strong>
+
+                    <small id="profileRole">
+                        User
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PROJECT HEADER -->
+
+        <div class="projects-header">
+
+            <div>
+
+                <span class="section-label">
+                    PROJECT WORKSPACE
+                </span>
+
+                <h2>
+                    Your Projects
+                </h2>
+
+            </div>
+
+
+            <button
+                class="create-button"
+                id="createProjectButton">
+
+                + Create Project
+
+            </button>
+
+        </div>
+
+
+        <div id="message"
+             class="message">
+        </div>
+
+
+        <!-- PROJECTS -->
+
+        <div id="projectsContainer"
+             class="projects-grid">
+
+            <div class="empty-projects">
+
+                Loading projects...
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- CREATE PROJECT MODAL -->
+
+<div class="modal"
+     id="projectModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Create Project</h2>
+
+            <button
+                class="close-button"
+                id="closeModal">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <form id="projectForm">
+
+            <div class="form-group">
+
+                <label for="title">
+                    Project Title
+                </label>
+
+                <input
+                    type="text"
+                    id="title"
+                    required
+                    minlength="3"
+                    maxlength="100"
+                    placeholder="Enter project title">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    required
+                    minlength="10"
+                    maxlength="500"
+                    placeholder="Describe the project">
+                </textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="budget">
+                    Budget
+                </label>
+
+                <input
+                    type="number"
+                    id="budget"
+                    required
+                    min="1"
+                    step="0.01"
+                    placeholder="Enter project budget">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="freelancer">
+                    Freelancer
+                </label>
+
+                <select id="freelancer"
+                        required>
+
+                    <option value="">
+                        Select Freelancer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    id="cancelButton">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                    id="submitButton">
+
+                    Create Project
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="/js/projects.js"></script>
+
+</body>
+
+</html>

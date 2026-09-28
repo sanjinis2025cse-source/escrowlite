@@ -35,4 +35,9 @@ public class HomeController {
     public String dashboard() {
         return "client-dashboard";
     }
+
+    @GetMapping("/projects")
+    public String projects() {
+        return "projects";
+    }
 }
